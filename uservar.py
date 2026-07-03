@@ -1,14 +1,14 @@
 '''#####-----Build File-----#####'''
-buildfile = 'http://CHANGEME'
+buildfile = 'https://raw.githubusercontent.com/adamsbuilds/repo/refs/heads/master/zips/builds.json'
 
 '''#####-----Videos File-----#####'''
-videos_url = 'http://CHANGEME'
+videos_url = 'http://'
 
 '''#####-----Notification File-----#####'''
-notify_url  = 'http://CHANGEME'
+notify_url  = 'https://raw.githubusercontent.com/adamsbuilds/repo/refs/heads/master/zips/valar_notify.txt'
 
 '''#####-----Changelog Directory-----#####'''
-changelog_dir  = 'http://CHANGEME/'
+changelog_dir  = 'https://raw.githubusercontent.com/adamsbuilds/repo/refs/heads/master/zips/'
 
 '''#####-----Excludes-----#####'''
-excludes  = ['plugin.video.whatever']
+excludes  = ['']
