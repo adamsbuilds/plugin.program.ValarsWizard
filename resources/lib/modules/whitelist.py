@@ -1,4 +1,5 @@
 import json
+import re  # added for color removal -adamsbuilds
 import xbmc
 import xbmcaddon
 import xbmcvfs
@@ -18,11 +19,21 @@ dialog = xbmcgui.Dialog()
 EXCLUDES_BASIC = excludes + [addon_id, 'kodi.log', 'Addons33.db', 'packages', 'backups']
 EXCLUDES_FRESH = [addon_id, 'Addons33.db', 'kodi.log', 'script.module.certifi', 'script.module.chardet', 'script.module.idna', 'script.module.requests', 'script.module.urllib3']
 
+# Helper function to strip Kodi color codes
+def strip_kodi_colors(text):
+    if not text:
+        return text
+    # removes [COLOR <anything>] and [/COLOR] case-insensitively -adamsbuilds
+    clean_text = re.sub(r'\[\/?color[^\]]*\]', '', text, flags=re.IGNORECASE)
+    return clean_text
+
 def get_whitelist():
     dirs, files = xbmcvfs.listdir(addons_path)
     dirs.sort()
     for x in ['packages', 'temp']:
-        dirs.remove(x)
+        if x in dirs:  # Safe check to prevent ValueError if 'temp' doesn't exist
+            dirs.remove(x)
+            
     preselect = []
     if xbmcvfs.exists(file_path):
         with open(file_path, 'r') as wl:
@@ -34,11 +45,15 @@ def get_whitelist():
     xbmc.log('dirs = ' + str(dirs), xbmc.LOGINFO)
     names = []
     for foldername in dirs:
-        try :
+        try:
             name = xbmcaddon.Addon(foldername).getAddonInfo('name')
         except:
             name = foldername
-        names.append(name)
+            
+        # Remove Color from Text -adamsbuilds
+        clean_name = strip_kodi_colors(name)
+        names.append(clean_name)
+        
     ret = dialog.multiselect('Select Items to Add to Your Whitelist', names, preselect=preselect)
     xbmc.log('ret = ' + str(ret), xbmc.LOGINFO)
     if ret is None:
